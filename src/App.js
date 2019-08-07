@@ -1,25 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import reducers from './Reducer';
+import AddContact from './Components/AddContact';
+import ContactContainer from './Components/ContactContainer';
 import './App.css';
 
+const store = createStore(reducers, applyMiddleware(thunk));
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+        <div className="App">
+          <BrowserRouter baseroute='/'>
+            <Switch>
+              <Route path='/add' render={(props) => <AddContact {...props} />} />
+              <Route path='/edit' render={(props) => <AddContact {...props} />} />
+              <Route path='/' render={(props) => <ContactContainer {...props} />} />
+              <Redirect to='/' />
+            </Switch>
+         </BrowserRouter>
+        </div>
+    </Provider>
   );
 }
 
